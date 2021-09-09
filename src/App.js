@@ -1,18 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useForm } from "react-hook-form";
 import './App.css';
 import logo from './assets/logo.png';
 import Lottie from "react-lottie";
 import Loader from "react-loader-spinner";
-import { Form, Input } from "@rocketseat/unform";
-import { sendMail } from './services/mail';
 import successmessage from "./assets/success.json";
-import countryList from 'react-select-country-list'
+import countryList from 'react-select-country-list';
+import axios from 'axios'
+
+const API_PATH = './services/index.php'
 
 function App() {
 
+  const {register, handleSubmit, formState: { errors }} = useForm();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const options = useMemo(() => countryList().getData(), [])
+  const options = useMemo(() => countryList().getData(), []);
   const returnSuccess = {
     loop: false,
     autoplay: true,
@@ -22,11 +25,23 @@ function App() {
     },
   };
   
-  async function handleSubmit(values){
-    setLoading(!loading);
-    await sendMail(values).then(setSuccess(true))
-    
+  function handleFormSubmit(value){
+    setLoading(true)
+    const {name, email, tel} = value
+    console.log('res', name, email, tel)
+    axios({
+      method: 'post',
+      url:`${API_PATH}`,
+      headers: { 'content-type': 'application/json' },
+      data: value
+      })
+    .then(result => {
+      console.log('Enviado com sucesso!!!');
+      setLoading(false)
+    })
+    .catch(error => console.log({ error: error.message }));
   }
+  
 
   return (
     <div className="App">
@@ -47,16 +62,13 @@ function App() {
               Usamos tecnologia para te conectar ao crédito imobiliário que você precisa. Em vez de procurar de banco em banco, gastando tempo e dinheiro, nós fazemos a busca e encontramos a melhor condição de financiamento imobiliário para você. Com acesso a todos os maiores Bancos e Instituições Financeiras do Brasil, para garantir a sua liberdade de escolha!
             </span>
             <strong>entre em contato</strong>
-            <PhoneInput
-              country={'us'}
-            />
-            <Form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
               <label>Nome</label>
-              <Input type="text" id="name" name="name" />
+              <input type="text" id="name" {...register('name')} />
               <label>Seu melhor e-mail</label>
-              <Input type="text" id="email" name="email" />
+              <input type="text" id="email" {...register('email')} />
               <label>Seu melhor telefone</label>
-              <Input type="text" id="tel" name="tel" />
+              <input type="text" id="tel" {...register('tel')} />
               <button
                 type="submit"
                 disabled={loading}
@@ -67,7 +79,7 @@ function App() {
                   "Enviar"
                 )}
               </button>
-            </Form>
+            </form>
           </>
         )}
         
