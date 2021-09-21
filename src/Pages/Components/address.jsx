@@ -1,53 +1,58 @@
 import React from "react";
+import InputMask from "react-input-mask";
 
 function Address({ register, errors }) {
   return (
     <>
+    <h1>Insira seu endereço</h1>
       <div className="formGroup large">
         <label>
           <span className="required">* </span>Logradouro:{" "}
         </label>
-        <input id="street" {...register("street")} />
-        <p>{errors.street?.message}</p>
+        <input id="logradouro" {...register("logradouro")} />
+        <p>{errors.logradouro?.message}</p>
       </div>
       <div className="formGroup small">
         <label>
           <span className="required">* </span>Numero:{" "}
         </label>
-        <input id="number" {...register("number")} />
-        <p>{errors.number?.message}</p>
+        <input id="numero" {...register("numero")} />
+        <p>{errors.numero?.message}</p>
       </div>
       <div className="formGroup large">
         <label>
           <span className="required">* </span>CEP:{" "}
         </label>
-        <input id="cep" {...register("cep")} />
+        <InputMask 
+        mask="99999-999"
+        id="cep" 
+        {...register("cep")} />
         <p>{errors.cep?.message}</p>
       </div>
       <div className="formGroup small">
         <label>
           <span className="required">* </span>Cidade:{" "}
         </label>
-        <input id="city" {...register("city")} />
-        <p>{errors.city?.message}</p>
+        <input id="cidade" {...register("cidade")} />
+        <p>{errors.cidade?.message}</p>
       </div>
       <div className="formGroup large">
         <label>
           <span className="required">* </span>Estado:{" "}
         </label>
-        <input id="state" {...register("state")} />
-        <p>{errors.state?.message}</p>
+        <input id="estado" {...register("estado")} />
+        <p>{errors.estado?.message}</p>
       </div>
       <div className="formGroup small">
         <label>
           <span className="required">* </span>O Imóvel onde reside é:{" "}
         </label>
-        <select id="immobile" {...register("immobile")}>
+        <select id="imovel" {...register("imovel")}>
           <option value="proprio">Próprio</option>
           <option value="alugado">Alugado</option>
           <option value="deFamiliar">De familiar</option>
         </select>
-        <p>{errors.immobile?.message}</p>
+        <p>{errors.imovel?.message}</p>
       </div>
     </>
   );

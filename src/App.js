@@ -10,11 +10,12 @@ import Address from "./Pages/Components/address";
 import Imovel from "./Pages/Components/imovel";
 import InfoBank from "./Pages/Components/infoBank";
 import UploadDocs from "./Pages/Components/uploadDocs";
+import InputMask from "react-input-mask";
 import "./App.css";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const API_PATH = "./services/index.php";
+const API_PATH = "./services/formulario.php";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -42,41 +43,44 @@ function App() {
   const schemaFields = {
     personal: {
       name: Yup.string().required("Campo nome obrigatório"),
-      taxId: Yup.string().required("Campo CPF obrigatório"),
+      cpf: Yup.string().required("Campo CPF obrigatório"),
       email: Yup.string().required("Campo e-mail obrigatório"),
-      nationality: Yup.string().required("Campo nacionalidade obrigatório"),
-      profession: Yup.string().required("Campo profissão obrigatório"),
-      monthlyIncome: Yup.string().required("Campo renda mensal obrigatório"),
-      maritalStatus: Yup.string().required("Campo estado civil obrigatório"),
+      nacionalidade: Yup.string().required("Campo nacionalidade obrigatório"),
+      profissao: Yup.string().required("Campo profissão obrigatório"),
+      rendaMensal: Yup.string().required("Campo renda mensal obrigatório"),
+      estadoCivil: Yup.string().required("Campo estado civil obrigatório"),
     },
     address: {
-      street: Yup.string().required("Campo Logradouro obrigatório"),
-      number: Yup.string().required("Campo Numero obrigatório"),
+      logradouro: Yup.string().required("Campo Logradouro obrigatório"),
+      numero: Yup.string().required("Campo Numero obrigatório"),
       cep: Yup.string().required("Campo CEP obrigatório"),
-      city: Yup.string().required("Campo Cidade obrigatório"),
-      state: Yup.string().required("Campo Estado obrigatório"),
-      immobile: Yup.string().required("Campo Imóvel obrigatório"),
+      cidade: Yup.string().required("Campo Cidade obrigatório"),
+      estado: Yup.string().required("Campo Estado obrigatório"),
+      imovel: Yup.string().required("Campo Imóvel obrigatório"),
     },
     bank: {
       bank: Yup.string().required("Campo Banco obrigatório"),
-      agency: Yup.string().required("Campo Agência obrigatório"),
-      account: Yup.string().required("Campo Conta obrigatório"),
+      agencia: Yup.string().required("Campo Agência obrigatório"),
+      conta: Yup.string().required("Campo Conta obrigatório"),
     },
     property: {
-      propertyValue: Yup.string().required("Campo Valor do imóvel obrigatório"),
-      financingAmount: Yup.string().required(
+      valorDoImovel: Yup.string().required("Campo Valor do imóvel obrigatório"),
+      valorDoFinanciamento: Yup.string().required(
         "Campo Valor pretendido do financiamento obrigatório"
       ),
-      fgtsAmount: Yup.string().when("willYouUseFgts", {
+      ValorFgts: Yup.string().when("UtilizaFgts", {
         is: "true", // alternatively: (val) => val == true
         then: Yup.string().required("Campo Valor do FGTS obrigatório"),
       }),
       iqBank: Yup.string().when("iq", {
         is: "true", // alternatively: (val) => val == true
-        then: Yup.string().required("iqBank Valor do FGTS obrigatório"),
+        then: Yup.string().required("Campo Banco IQ obrigatório"),
       }),
-
-      payingIntervener: Yup.string().required(
+      tipoImovel: Yup.string().when("Campo UtilizaFgts", {
+        is: "true",
+        then: Yup.string().required("Campo Tipo do imóvel obrigatório"),
+      }),
+      intervenienteQuitante: Yup.string().required(
         "Campo Interveniente Quitante obrigatório"
       ),
     },
@@ -163,18 +167,25 @@ function App() {
   };
 
   async function handleFormSubmit(value) {
+    console.log("to aqui");
     const valid = await validateStep();
     if (valid === false) return false;
     try {
+      console.log("to no try");
+
       setLoading(true);
       const formData = new FormData();
       const cnhFile = value.cnh[0];
       const documentsFile = value.documents[0];
+      const documentsFile1 = value.documents1[0];
 
       Object.keys(value).forEach((name) => {
         if (name === "cnh") {
           formData.append("cnh", cnhFile);
+        } else if (name === "documents") {
           formData.append("documents", documentsFile);
+        } else if (name === "documents1"){
+          formData.append("documents1", documentsFile1);
         } else {
           formData.append(name, value[name]);
         }
@@ -219,7 +230,7 @@ function App() {
             </span>
             <strong>entre em contato</strong>
 
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form>
               {render()}
 
               <div>
@@ -244,7 +255,7 @@ function App() {
                   )}
                 </button>
                 {step > 0 ? (
-                  <button onClick={() => onPrev()} disabled={loading}>
+                  <button type="button" onClick={() => onPrev()} disabled={loading}>
                     Voltar
                   </button>
                 ) : null}

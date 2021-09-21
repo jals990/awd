@@ -1,8 +1,10 @@
 import React from "react";
+import InputMask from "react-input-mask";
 
 function InfoBank({ register, errors }) {
   return (
     <>
+    <h1>Dados bancários</h1>
       <div className="formGroup large">
         <label>
           <span className="required">* </span>Em qual Banco você tem conta PF:{" "}
@@ -14,8 +16,11 @@ function InfoBank({ register, errors }) {
         <label>
           <span className="required">* </span>Agência:{" "}
         </label>
-        <input id="agency" {...register("agency")} />
-        <p>{errors.agency?.message}</p>
+        <InputMask 
+        mask="9999"
+        id="agencia" 
+        {...register("agencia")} />
+        <p>{errors.agencia?.message}</p>
       </div>
       <div className="formGroup  large">
         <label>
@@ -23,10 +28,10 @@ function InfoBank({ register, errors }) {
         </label>
         <input
           placeholder="Conta com dígito"
-          id="account"
-          {...register("account")}
+          id="conta"
+          {...register("conta")}
         />
-        <p>{errors.account?.message}</p>
+        <p>{errors.conta?.message}</p>
       </div>
     </>
   );

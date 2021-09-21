@@ -47,6 +47,14 @@
   color: var(--white)
 }
 
+h1 {
+  font-family: Ubuntu, sans-serif;
+  width: 400px;
+  font-size: 24px;
+  margin-bottom: 32px;
+  color: var(--white);
+}
+
 .required {
   color: var(--red-required) !important;
 }

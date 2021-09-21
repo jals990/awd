@@ -4,6 +4,7 @@ import React from "react";
 function UploadDocs({ register, errors }) {
   return (
     <>
+      <h1>Upload de documentos</h1>
       <div className="formGroup large">
         <label>
           <span className="required">* </span>Scaner da CNH:{" "}
@@ -17,13 +18,21 @@ function UploadDocs({ register, errors }) {
         <p>{errors.cnh?.message}</p>
       </div>
       <div className="formGroup large">
-        <label>Documentos complementares: </label>
+        <label>IRPF Recibo e Declaração completa: </label>
         <input
           type="file"
           id="documents"
-          multiple="multiple"
-          accept="image/jpeg, image/png, application/pdf"
+          accept="application/pdf"
           {...register("documents")}
+        />
+      </div>
+      <div className="formGroup large">
+        <label>Holerites ou Extrato C/C: </label>
+        <input
+          type="file"
+          id="documents"
+          accept="application/pdf"
+          {...register("documents1")}
         />
         <p>
           Neste campo, você pode anexar fotos de documentos complementares.
