@@ -272,7 +272,12 @@ function App() {
 
       <div className="intro">
         <img className="custom-img" alt="logo-awd" src={logo} />
-        <p>Avenida Guapira, 701 contato@awdbank.com.br 38.368.975/0001-40</p>
+        <div>
+          <p>Logradouro: Avenida Guapira, 701</p>
+          <p>E-mail: contato@awdbank.com.br</p>
+          <p>Tel: 11 963461985</p>
+          <p>CNPJ: 38.368.975/0001-40</p>
+        </div>
       </div>
     </div>
   );
